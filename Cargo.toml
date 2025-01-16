@@ -17,7 +17,6 @@ doctest = false
 [features]
 default = ["serde"]
 gen = ["dep:prost-build", "dep:protoc-bin-vendored", "dep:walkdir"]
-update-gen = ["gen"]
 
 serde = ["dep:serde", "dep:serde_json"]
 ts-gen = ["serde", "dep:specta"]

@@ -67,22 +67,20 @@ fn generate_protobufs() -> std::io::Result<()> {
 
     config.compile_protos(&protos, &[protobufs_dir]).unwrap();
 
-    #[cfg(feature = "update-gen")]
-    {
-        let out_dir = std::env::var("OUT_DIR").unwrap();
-        let gen_dir = "src/generated-protobufs/";
-        walkdir::WalkDir::new(out_dir)
-            .into_iter()
-            .map(|e| e.unwrap())
-            .filter(|e| e.path().extension().is_some() && e.path().extension().unwrap() == "rs")
-            .for_each(|e| {
-                let file_name = e.path().file_name().unwrap();
-                let _ = std::fs::copy(
-                    e.path(),
-                    std::path::Path::new(gen_dir).join(file_name),
-                );
-            });
-    }
+
+    let out_dir = std::env::var("OUT_DIR").unwrap();
+    let gen_dir = "src/generated-protobufs/";
+    walkdir::WalkDir::new(out_dir)
+        .into_iter()
+        .map(|e| e.unwrap())
+        .filter(|e| e.path().extension().is_some() && e.path().extension().unwrap() == "rs")
+        .for_each(|e| {
+            let file_name = e.path().file_name().unwrap();
+            let _ = std::fs::copy(
+                e.path(),
+                std::path::Path::new(gen_dir).join(file_name),
+            );
+        });
 
     Ok(())
 }
