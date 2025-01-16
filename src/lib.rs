@@ -74,8 +74,12 @@ pub mod packet {
 /// are not edited directly, but are instead generated at build time.
 pub mod protobufs {
 
-    #![allow(non_snake_case)]
+    #[cfg(not(feature = "gen"))]
     include!("generated-protobufs/meshtastic.rs");
+
+    #[cfg(feature = "gen")]
+    #[allow(non_snake_case)]
+    include!(concat!(env!("OUT_DIR"), "/meshtastic.rs"));
 }
 
 /// This module re-exports the `specta` crate, which is used to generate TypeScript
