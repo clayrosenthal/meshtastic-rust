@@ -65,11 +65,14 @@ fn generate_protobufs() -> std::io::Result<()> {
         config.type_attribute(".", "#[allow(clippy::doc_lazy_continuation)]");
     }
 
-    // To update the generated-protobufs directory, uncomment the following line:
-    // let out_dir = "src/generated-protobufs/";
-    // config.out_dir(out_dir);
-
     config.compile_protos(&protos, &[protobufs_dir]).unwrap();
+
+    #[cfg(feature = "update-gen")]
+    {
+        let out_dir = std::env::var("OUT_DIR").unwrap();
+        let gen_dir = "src/generated-protobufs/";
+        let _ = std::fs::copy(out_dir, gen_dir);
+    }
 
     Ok(())
 }
